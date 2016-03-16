@@ -72,8 +72,11 @@ int main(int argc,char* argv[])
 	for (int i=0;i<240;i++)
 	if (place_tool->cells[i].in_v.size())
 	{
-		for (int j=0;j<4;j++)
+		for (int j=3;j>=0;j--)
+		if (place_tool->cells[i].in_v[j]/64==j && place_tool->cells[i].in_v[j]>0)
 			fprintf(stdout,"%c",(char)(place_tool->cells[i].in_v[j]%64));
+		else
+			fprintf(stdout,"%c",(char)0);
 		
 	}
 	else
