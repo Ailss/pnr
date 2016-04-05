@@ -5,10 +5,13 @@ Step to start:
 ------------------------------------------
 cd src  
 make  
-./pnr.elf [the blif file]  
+./pnr.elf [the blif file]  <--binary/--char>
+
+Update:
+Now users can choose binary/char format for output.
 
 The "stderr" output is the text format of the routing logic   
-The "stdout" output is the binary foramt of the routing logic   
+The "stdout" output is the binary/char foramt of the routing logic   
 
 Hint: If you don't know how to save the stdout or stderr to a file, please google "linux I/O Redirection" or "linux Redirection"  
 
@@ -24,7 +27,7 @@ Bitstream:
 ----------------------------------------
   Becauase the minimum output of C++ is one byte(8 bits), I change the format of the bitstream a little bit. Please check your hardware design and change it a little bit.  
   
-### The old rule is described as following
+### (origin plan) The old rule is described as following. 
   
   
   Routing bitstream:                      // the ' is just used in the comment!  
@@ -58,7 +61,7 @@ Bitstream:
 1111  | 1110  | 1101  | 1100  | 1011  | 1010  | 1001  | 1000  | 0111  | 0110 | 0101  | 0100  | 0011  | 0010  | 0001  | 0000  
   
    
-###  The format I am using. 
+###  The format I am using. (option --binary)
   Routing bitstream:                 //I add two extra 0 to the most significant bits  
       0: 8bits 8bits 8bits 8bits           //the new format corresponding to the above example is 00111111'00000000'00000010'00000001  
       1: 8bits 8bits 8bits 8bits  
@@ -79,4 +82,6 @@ Bitstream:
       ..  
       239: 14bits(0) 16bits 1bit 1bit  
 
-  
+### Update format (--char)
+  The order of the output is exactly the same as the origin plan. 
+  The only difference is that each bit in the origin plan is replaced with a 0/1 charactar 
