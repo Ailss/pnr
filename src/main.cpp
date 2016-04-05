@@ -131,6 +131,8 @@ int main(int argc,char* argv[])
 	
 	parser blif_parser(argv[1]);
 	
+	for (int i=1;i<argc;i++)
+		main_config.handle_args(argv[i+1]);
 	
 	pin_init();
 	
