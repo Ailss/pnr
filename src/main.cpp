@@ -24,7 +24,7 @@ struct conf_struc
 		memset(this,0,sizeof(conf_struc));
 	}
 	
-	void handle_args();
+	void handle_args(char *);
 };
 
 conf_struc main_config;
@@ -34,7 +34,7 @@ void conf_struc::handle_args(char* argv)
 	char buf[1024];
 	if (sscanf(argv,"--%s",buf))
 	{
-		if (strcmp("binary".buf)==0)
+		if (strcmp("binary",buf)==0)
 			main_config.output_format=1;	
 		else
 			main_config.output_format=0;
@@ -180,6 +180,7 @@ int main(int argc,char* argv[])
 		bin_output();
 	else
 		char_output();
+		
 	delete place_tool;
 
 	return 0;
