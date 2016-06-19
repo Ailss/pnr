@@ -38,8 +38,6 @@ void conf_struc::handle_args(char* argv)
 			main_config.output_format=1;	
 		else
 			main_config.output_format=0;
-		
-		exit(-1);
 	}
 	else if (sscanf(argv,"-%s",buf))
 	{
@@ -132,7 +130,7 @@ int main(int argc,char* argv[])
 	parser blif_parser(argv[1]);
 	
 	for (int i=1;i<argc;i++)
-		main_config.handle_args(argv[i+1]);
+		main_config.handle_args(argv[i]);
 	
 	pin_init();
 	
