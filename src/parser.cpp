@@ -158,21 +158,22 @@ void parser::deal_gate(char* gate)
 		}
 
 		
-		char* pbuf=buf;
+		char* pbuf=buf; // this is the initialization value.
 		next_nonspace(pbuf);
 		next_nonspace(pbuf);
 		int bufl=strlen(pbuf);
 		
 		int k=16;
-		for (int j=0;j<16/bufl;j++)
-		for (int i=0;i<bufl;i++)
-		if (pbuf[i]=='1')
-			v.sreg[--k]=1;
-		else
-			v.sreg[--k]=0;
-			
-		
-		
+
+        // ex. 0110 -> 0000111111110000
+		for (int j=0;j<bufl;j++) { // if the initialization value is too short, we repeat each digit a number of times.
+		    for (int i=0;i<16/bufl;i++) { // repeat the digit n times. if we were given 16 values, only once. 8=twice, etc.
+		        if (pbuf[j]=='1')
+			        v.sreg[--k]=1;
+		        else
+			        v.sreg[--k]=0;
+            }
+	    }
 	}
 	else if (strcmp(buf,"SB_DFF")==0)
 	{

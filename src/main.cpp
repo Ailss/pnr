@@ -76,47 +76,44 @@ void bin_output()
 		fprintf(stdout,"%d",0);
 	}
 }
-void char_output()
+
+void printReverse(string input)
 {
-	for (int i=0;i<240;i++)
-	if (place_tool->cells[i].in_v.size())
-	{
-		for (int j=3;j>=0;j--)
-		if (place_tool->cells[i].in_v[j]/64==j && place_tool->cells[i].in_v[j]>0)
-		{
-			bitset<6> bits(place_tool->cells[i].in_v[j]%64);
-			cerr<<bits;
-		}
-//			fprintf(stdout,"%c",(char)(place_tool->cells[i].in_v[j]%64));
-		else
-		{
-			bitset<6> bits(0);
-			cerr<<bits;
-		}
-//			fprintf(stdout,"%c",(char)0);
+    char *toPrint = new char[input.length() + 1];
+    strcpy(toPrint, input.c_str());
+    reverse(toPrint, toPrint + strlen(toPrint));
+    cerr << toPrint;
+}
+void char_output() {
+    for (int j = 0; j < 4; j++) {
+	    for (int i=0;i<240;i++) { // the first thing we output is the routing. 
+            //cerr << "\n Input: " << j << " LUT: " << i << "\n";
+	        if (place_tool->cells[i].in_v.size()) { // if the size is not 0, then we have data.
+	            if (place_tool->cells[i].in_v[j] != -1) {
+		            bitset<6> bits(place_tool->cells[i].in_v[j]%64);
+		            printReverse(bits.to_string());
+	            } else {
+		            bitset<6> bits(0);
+                    printReverse(bits.to_string());
+	            }
+	        } else {
+		        bitset<6> bits(0);
+		        printReverse(bits.to_string());
+	        }
+        }
+    }
+	for (int i=0;i<240;i++) {
+	    if (place_tool->cells[i].in_v.size()) { // only if we have data in this cell.
+		    bitset<18> bits(place_tool->cells[i].sreg.to_ulong()<<2); // shift left by two to because the last two are for the reset and enable FF values.
+		    bits[0]=place_tool->cells[i].type; // bit 17 is the enable/disable
 		
-	}
-	else
-	{
-		bitset<24> bits(0);
-		cerr<<bits;
-	}
-
-	for (int i=0;i<240;i++)
-	if (place_tool->cells[i].in_v.size())
-	{
-		bitset<18> bits(place_tool->cells[i].sreg.to_ulong()<<2);
-	
-
-		bits[16]=place_tool->cells[i].type;
-		
-		cerr<<bits;
-	}
-	else
-	{
-		bitset<18> bits(0);
-		cerr<<bits;
-	}
+		    printReverse(bits.to_string());
+	    } else {
+		    bitset<18> bits(1); // 1 to enable the flipflop
+		    printReverse(bits.to_string());
+	    }
+        //cerr << " LUT: " << i << "\n";
+    }
 }
 int main(int argc,char* argv[])
 {
@@ -163,18 +160,19 @@ int main(int argc,char* argv[])
 	
 	place_tool=new place(blif_parser);
 	place_tool->naive_place();
-	for (int i=0;i<240;i++)
-	if (place_tool->cells[i].in_v.size())
-	{
-		fprintf(stderr,"logic cell %d: ",i);
-		for (vector<int>::iterator it=place_tool->cells[i].in_v.begin();it!=place_tool->cells[i].in_v.end();it++)
-			fprintf(stderr,"%d ",*it);
+	for (int i=0;i<240;i++) {
+	    if (place_tool->cells[i].in_v.size())
+	    {
+		    fprintf(stderr,"logic cell %d: ",i);
+		    for (vector<int>::iterator it=place_tool->cells[i].in_v.begin();it!=place_tool->cells[i].in_v.end();it++)
+			    fprintf(stderr,"%d ",*it);
 			
-		cerr<<place_tool->cells[i].sreg;
-		fputc(' ',stderr);
-		cerr<<place_tool->cells[i].type;
-		fputc('\n',stderr);
-	}
+		    cerr<<place_tool->cells[i].sreg;
+		    fputc(' ',stderr);
+		    cerr<<place_tool->cells[i].type;
+		    fputc('\n',stderr);
+	    }
+    }
 	
 	if (main_config.output_format==1)
 		bin_output();

@@ -25,7 +25,7 @@
 
 
 #ifndef SB
-#define SB
+#define SB 3
 #define SB_LUT4 1
 #define SB_DFF 2
 
